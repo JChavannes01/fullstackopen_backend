@@ -68,20 +68,9 @@ app.delete("/api/persons/:id", (request, response) => {
 });
 
 app.post("/api/persons", (request, response, next) => {
-  const body = request.body;
+  const { name, number } = request.body;
 
-  if (!body.name) {
-    return response.status(400).json({ error: "name missing" });
-  }
-  if (!body.number) {
-    return response.status(400).json({ error: "number missing" });
-  }
-
-  const person = new Person({
-    name: body.name,
-    number: body.number,
-  });
-
+  const person = new Person({ name, number });
   person
     .save()
     .then((savedPerson) => {
@@ -92,13 +81,6 @@ app.post("/api/persons", (request, response, next) => {
 
 app.put("/api/persons/:id", (request, response, next) => {
   const { name, number } = request.body;
-
-  if (!name) {
-    return response.status(400).json({ error: "name missing" });
-  }
-  if (!number) {
-    return response.status(400).json({ error: "number missing" });
-  }
 
   // option new:true causes the updatedPerson object to contain modified values instead of old values.
   Person.findByIdAndUpdate(
